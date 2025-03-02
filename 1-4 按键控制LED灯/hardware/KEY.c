@@ -1,0 +1,32 @@
+#include "stm32f10x.h"                  // Device header
+#include "delay.h"
+
+void key_star(void)
+{
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+	GPIO_InitTypeDef GPIO_Initstructer;
+	GPIO_Initstructer.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Initstructer.GPIO_Pin = GPIO_Pin_1|GPIO_Pin_11;
+	GPIO_Initstructer.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB,&GPIO_Initstructer);
+}
+
+uint8_t keynum(void)
+{
+	uint8_t key = 0;
+	if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_1)==0)
+	{
+		Delay_ms(200);
+		while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_1)==0);
+		Delay_ms(200);
+		key = 1;
+	}
+	if(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_11)==0)
+	{
+		Delay_ms(200);
+		while(GPIO_ReadInputDataBit(GPIOB,GPIO_Pin_11)==0);
+		Delay_ms(200);
+		key = 2;
+	}
+	return key;
+}
